@@ -1,0 +1,53 @@
+{
+    "freifunk": {
+        "name": "freifunk.net", 
+        "api": "1.0.0", 
+        "url": "http://freifunk.net", 
+        "techDetails": {
+            "updatemode": [], 
+            "firmware": {
+                "name": "Several Openwrt based"
+            }, 
+            "routing": [
+                "batman-adv", 
+                "bmxd", 
+                "OLSR"
+            ]
+        }, 
+        "state": {
+            "nodes": 16000, 
+            "lastchange": "2015-08-10T10:43:10.956Z", 
+            "focus": [
+                "infrastructure/backbone", 
+                "Public Free Wifi", 
+                "Social Community Building", 
+                "Local services and content", 
+                "Free internet access"
+            ]
+        }, 
+        "contact": {
+            "ml": "wlannews@freifunk.net", 
+            "twitter": "@freifunk", 
+            "irc": "irc://irc.hackint.eu/#freifunk", 
+            "email": "info@freifunk.net"
+        }, 
+        "location": {
+            "country": "DE"
+        }, 
+        "mtime": "2015-08-10 12:47:12.341625", 
+        "feeds": [
+            {
+                "category": "blog", 
+                "url": "http://freifunk.net/fffeed/feed.php", 
+                "type": "rss", 
+                "name": "Freifunk aggregated RSS Feed"
+            }, 
+            {
+                "category": "ics", 
+                "url": "http://freifunk.net/?plugin=all-in-one-event-calendar&controller=ai1ec_exporter_controller&action=export_events&no_html=true&lang=de", 
+                "type": "ics", 
+                "name": "Freifunk events"
+            }
+        ]
+    }
+}
