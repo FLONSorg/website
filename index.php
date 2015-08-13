@@ -7,9 +7,10 @@
         <meta name="author" content="Andreas Bräu" >
 
         <!-- Le styles -->
-                      <link href="/inc/css/flons.css" rel="stylesheet">
-          <link href="inc/css/bootstrap.min.css" rel="stylesheet"> 
-
+        <link href="/inc/css/flons.css" rel="stylesheet">
+        <link href="inc/css/bootstrap.min.css" rel="stylesheet"> 
+	<link rel="stylesheet" type="text/css" href="inc/tl/malihu-scrollbar/jquery.mCustomScrollbar.min.css" />
+	<link rel="stylesheet" type="text/css" href="inc/tl/timeline.css"/>
 
           <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
           <!--[if lt IE 9]>
@@ -30,13 +31,17 @@
     <div class="row">
         <div class="col-sm-6">
           <h2>The FLONS API</h2>
+	  <p>An API (application programming interface) is a set of protocols, routines and tools that specifies how software connects to other software. Through these ports, information can be provided from one software component to another.</p>
+	  <p>The FLONS API is to collect metadata of FLONS communities in a decentralized way. It's represented by a json file hosted by the communities theirselfes and listed in <a href="">directory</a>. We provide some tools to collect all files from communities, aggregate information like rss feeds and calendars.</p>
         </div>
-        <div class="col-sm-3">
+        <div id="news" class="col-sm-3">
           <h2>News</h2>
-          <?php include("./inc/allnews.inc.php") ?>
+	  <p>All feeds of category "blog" and type "rss" will be aggregated into one feed. The origin community will be written to the rss source tag. Subscribe <a href="http://api.flons.org/feed/feed.php?items=100">that feed</a> to get all community news.</p>
         </div>
-        <div class="col-sm-3">
-          <h2>Events</h2>
+        <div id="calendar" class="col-sm-3">
+          <h2>Calendar</h2>
+	  <p>We aggregate community calendars provided by FLONS API files. Subscribe <a href="http://api.flons.org/ics-collector/CalendarAPI.php?fields=start,source,summary,description,url,end,location,sourceurl&source=all&order=oldest-first&format=ics">the calendar</a> to stay informed.</p>
+	  <div id="timeline-id"></div>
         </div>
     </div>
     <div class="row">
@@ -95,11 +100,7 @@
     <% }) %>
 </script>
 
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="http://www.weimarnetz.de/bower_components/bootstrap/assets/js/jquery.js"></script>
-<script src="http://www.weimarnetz.de/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
 <script  type="text/javascript">
 var tableTemplate = $("#table-data").html();
@@ -125,8 +126,38 @@ error: function(XMLHttpRequest, textStatus, errorThrown){alert("Error");
 test()
 
 </script>
-<script src="/inc/jquery.loadmask.js"></script>
-<script src="/inc/bootstrap-remote-tabs.js"></script>
-
+<script src="inc/tl/malihu-scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+<script src="inc/tl/timeline.js"></script>
+<script>
+  var options = {title: "Community events", limit : 10, order: "oldest-first"};
+  $('#timeline-id').communityTimeline(options);
+</script>
+<script>
+var url = 'http://api.flons.org/feed/feed.php?limit=3';
+    console.log(url);
+    $.ajax({
+      url: url,
+      error: function(err) {
+        console.log(err);
+      },
+      dataType: "jsonp",
+      success: function(data) {
+        $data = $($.parseXML(data));
+        items = $data.find('item');
+        var rssfeed = $("#news").append('<div class="rssfeed rss-container">').find('.rssfeed');
+        rssfeed.append('<div class="rss-header"><div class="rss-title">Neuigkeiten</div></div>');
+        var rssfeedList = rssfeed.append('<div class="rss-body"><div id="mCSB_1" class="rss-news mCustomScrollbar _mCS_1 mCS-autoHide"><div id="mCSB_1_container" class="mCustomScrollBox mCS-light-3 mCSB_vertical">').find('.rss-news');
+        if (items.length > 0) {
+          console.log('There are some items');
+          items.each(function(k, item) {
+            var blogLink = rssfeedList.append('<div class="rss-newsitem"><a class="bloglink" target="_blank">' + $(item).find('title').text() + '</a>'
+              + '</div>').find('a').last();
+            blogLink.attr('href', $(item).find('link').text());
+          });
+        }
+      },
+      timeout: 20000
+    });
+</script>
 </body></html>
 
