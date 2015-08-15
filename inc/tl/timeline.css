@@ -12,7 +12,7 @@
 }
 
 .tl-container {
-	max-height: 400px;
+	min-height: 400px;
 	overflow: hidden;
 	box-shadow: 0 2px 3px 2px #ccc;
 	-moz-box-shadow: 0 2px 3px 2px #ccc;
