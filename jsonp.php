@@ -21,7 +21,7 @@ function is_valid_callback($subject)
 if( isset($_GET['url']) ) {
   $url = $_GET['url'];
 } else {
-  $url ="http://freifunk.net/api/flons/flonsSummarizedDir.json";
+  $url ="http://api.flons.org/flonsSummarizedDir.json";
 }
 $data = file_get_contents($url);
 $json = json_encode($data);

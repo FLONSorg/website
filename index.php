@@ -3,7 +3,7 @@
 <title>FLONS API</title>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Free and Libre Open Networks">
+<meta name="description" content="Free Libre Open Networks">
 <meta name="author" content="Andreas Bräu" >
 
 <!-- Le styles -->
@@ -30,9 +30,9 @@
 <div class="container">
 <div class="row">
 <div class="col-sm-6">
-<h2>The FLONS API</h2>
-<p>An API (application programming interface) is a set of protocols, routines and tools that specifies how software connects to other software. Through these ports, information can be provided from one software component to another.</p>
-<p>The FLONS (<b>F</b>ree and <b>L</b>ibre <b>O</b>pen <b>N</b>etwork<b>s</b>) API is to collect metadata of FLONS communities in a decentralized way. It's represented by a json file hosted by the communities theirselfes and listed in <a href="https://github.com/FLONSorg/directory/blob/master/directory.json" target="_blank">the API directory</a>. We provide some tools to collect all files from communities, aggregate information like rss feeds and calendars.</p>
+<h2>The <b>F</b>ree <b>L</b>ibre <b>O</b>pen <b>N</b>etwork<b>s</b> API</h2>
+<p>The FLONS API is provided to aggregate metadata of <b>F</b>ree <b>L</b>ibre <b>O</b>pen <b>N</b>etworks communities in a decentralized way. It's represented by a json file hosted by the communities themselfes and listed in <a href="https://github.com/FLONSorg/directory/blob/master/directory.json" target="_blank">the API directory</a>. We provide some tools to collect all files from communities, aggregate information like rss feeds and calendars.</p>
+<p>To create your own API file please <a href="//api.flons.org">follow our step-by-step guide</a>.</p>
 </div>
 <div id="news" class="col-sm-3">
 <h2>News</h2>
@@ -63,6 +63,11 @@
 </table>
 </div>
 </div>
+<div class="row">
+<div class="col-sm-12">
+<p><small><a href="imprint.php">Imprint</a></small></p>
+</div>
+</div>
 </div>
 
 <script src="/inc/underscore.js"></script>
@@ -71,7 +76,11 @@
 
 <% _.each(items,function(item,key,list){ %>
 		<tr>
-		<td ><%= item.name  %></td>
+		<td ><% if (item.url) {%>
+			<a href="<%= item.url%>" target="_blank"><%= item.name %>
+		<% } else { %>
+			<%= item.name  %>
+		<% } %></td>
 		<% if (item.location.country) {%> 
 		<td><%= item.location.country %>
 		</a><% } else { %>
@@ -114,10 +123,33 @@ success: ( function(Response){
 	delete Response["myhostname"]; 
 	console.log(26, 'responseis: ', Response);
 	var rows = Response;
-	//rows = rows.sort(function(a,b) { return b.name - a.name;}); 
-	_.sortBy(Response, 'name');
-	console.log(26, 'sorted: ', rows);
-	$("table.router tbody").html(_.template(tableTemplate,{items:Response}));
+	_.sortBy(rows, 'name');
+	_.each(rows, function(item, key, list) {
+		if (item.url && !item.url.match(/^http([s]?):\/\/.*/)) { 
+      			item.url = "http://" + item.url; 
+		}
+		if (item.contact.ml && !item.contact.ml.match(/^mailto:.*/) && item.contact.ml.match(/.*\@.*/)) {
+			item.contact.ml = "mailto:" + item.contact.ml;
+    		} else if (item.contact.ml && !item.contact.ml.match(/^http([s]?):\/\/.*/) ) {
+			item.contact.ml = "http://" + item.contact.ml;
+		}
+		if (item.contact.email && !item.contact.email.match(/^mailto:.*/)) {
+			item.contact.email = "mailto:" + item.contact.email;
+    		}
+    		if (item.contact.twitter && !item.contact.twitter.match(/^http([s]?):\/\/.*/)) {
+      			item.contact.twitter = "https://twitter.com/" + item.contact.twitter;
+    		}
+    		if (item.contact.irc && !item.contact.irc.match(/^irc:.*/)) {
+      			item.contact.irc = "irc:" + item.contact.irc;
+    		}
+    		if (item.contact.jabber && !item.contact.jabber.match(/^jabber:.*/)) {
+      			item.contact.jabber = "xmpp:" + item.contact.jabber;
+    		}
+    		if (item.contact.identica && !item.contact.identica.match(/^identica:.*/)) {
+      			item.contact.identica = "identica:" + item.contact.identica;
+    		}
+	});
+	$("table.router tbody").html(_.template(tableTemplate,{items:rows}));
 	} ),
 error: function(XMLHttpRequest, textStatus, errorThrown){alert("Error");
 }
@@ -129,11 +161,11 @@ test()
 	<script src="inc/tl/malihu-scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
 	<script src="inc/tl/timeline.js"></script>
 	<script>
-	var options = {title: "Community events", limit : 10, order: "oldest-first"};
+	var options = {title: "Community events", limit: "8", order: "oldest-first"};
 $('#timeline-id').communityTimeline(options);
 </script>
 <script>
-var url = 'http://api.flons.org/feed/feed.php?limit=20';
+var url = 'http://api.flons.org/feed/feed.php?items=7';
 console.log(url);
 $.ajax({
 url: url,
@@ -151,7 +183,7 @@ if (items.length > 0) {
 console.log('There are some items');
 items.each(function(k, item) {
 	pubDate = new Date($(item).find('pubDate').text());
-	var blogLink = rssfeedList.append('<div class="rss-newsitem"><a class="bloglink" target="_blank">' + $(item).find('title').text() + '</a></br><small>' + pubDate.toLocaleDateString() + ' by ' + $(item).find('source').first().text() + '</small>'
+	var blogLink = rssfeedList.append('<div class="rss-newsitem"><a class="bloglink" target="_blank">' + $(item).find('title').text() + '</a></br><small>' + pubDate.toLocaleDateString() + ' by ' + $(item).find('source').last().text() + '</small>'
 		+ '</div>').find('a').last();
 	blogLink.attr('href', $(item).find('link').text());
 	});
