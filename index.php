@@ -31,8 +31,16 @@
 <div class="row">
 <div class="col-sm-6">
 <h2>The <b>F</b>ree <b>L</b>ibre <b>O</b>pen <b>N</b>etwork<b>s</b> API</h2>
-<p>The FLONS API is provided to aggregate metadata of <b>F</b>ree <b>L</b>ibre <b>O</b>pen <b>N</b>etworks communities in a decentralized way. It's represented by a json file hosted by the communities themselfes and listed in <a href="https://github.com/FLONSorg/directory/blob/master/directory.json" target="_blank">the API directory</a>. We provide some tools to collect all files from communities, aggregate information like rss feeds and calendars.</p>
+<h3>Idea</h3>
+<p>flons.org is an information hub for people to easily find communities, that are working on <b>F</b>ree <b>L</b>ibre <b>O</b>pen <b>N</b>etwork<b>s</b> all over the world. </p>
+<p>The FLONS API aggregates the decentralized metadata from the communities in a simple way. It's represented by a json file hosted by the communities themselves and listed in <a href="https://github.com/FLONSorg/directory/blob/master/directory.json" target="_blank">the API directory</a>. We provide some tools to collect all files from communities to aggregate information like rss feeds and calendars.</p>
+<p>Interested people can access information how to get in contact, where groups do meet and how to donate and participate.</p>
+<p>We would like to invite you to use the collected data to do your own visualizations and services. Please feel free to contribute to the <a href="https://github.com/FLONSorg" target="_blank">FLONSorg repositories</a></p>
 <p>To create your own API file please <a href="//api.flons.org">follow our step-by-step guide</a>.</p>
+<h3>What is a Free Libre Open Network?</h3>
+<p>Any computer network that allows free local transit, which is following the guidelines of our peering agreement. By "transit", we refer to information flowing through the network. Most of the communities specialize in wireless networking, but a FLON can be built using ethernet, fiber optics, or any other kind of networking technology. FLONs are defined by what its users can do with it, rather than the particular technology it is built on.</p>
+<p>The groups are volunteer cooperative associations dedicated to education, collaboration and inclusion. We aim to promote open networks and encourage people to learn about the benefits that free & open networks provide. FLONS do provide resources to learn about technologies used to build these networks. You can show solidarity and support the cause by building a network that follows our peering guidelines.</p>
+<p>Free Networkers have been meeting since 2000 to organize, share information, and pool resources to find the best way to build community networks. Our activists include community advocates, system administrators, RF engineers, writers, lawyers, programmers, designers and many others who want to help build FLONS in their local communities.</p>
 </div>
 <div id="news" class="col-sm-3">
 <h2>News</h2>
@@ -88,7 +96,7 @@
 		<% } %>
 		</td>
 
-		<% if (item.techDetails.firmware.name) {%> 
+		<% if (item.techDetails.firmware && item.techDetails.firmware.name) {%> 
 		<td><%= item.techDetails.firmware.name %>
 		<% } else { %>
 		<td>
